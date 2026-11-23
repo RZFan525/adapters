@@ -1,0 +1,26 @@
+[
+  {
+    "adapter_name": "cot-control",
+    "agent": "cot-control-llm@0.1.0",
+    "model": "TBD",
+    "date": "TBD",
+    "adapted_benchmark_size": 10836,
+    "parity_benchmark_size": null,
+    "number_of_runs": null,
+    "notes": "PLACEHOLDER: parity experiments have not been run yet. Agent, model, number of runs and subset must first be agreed with the Harbor team. No scores are recorded here until both sides have been run.",
+    "original_parity_repo": null,
+    "adapter_pr": [],
+    "dataset_pr": [],
+    "parity_pr": [],
+    "metrics": [
+      {
+        "benchmark_name": "CoT-Control",
+        "metric": "Controllability Score (macro-average over dataset x instruction type, %)",
+        "original": "TBD",
+        "harbor": "TBD",
+        "original_runs": [],
+        "harbor_runs": []
+      }
+    ]
+  }
+]
