@@ -9,7 +9,7 @@
     "number_of_runs": null,
     "notes": "PLACEHOLDER: parity experiments have not been run yet. Agent, model, number of runs and subset must first be agreed with the Harbor team. No scores are recorded here until both sides have been run.",
     "original_parity_repo": null,
-    "adapter_pr": [],
+    "adapter_pr": ["https://github.com/harbor-index/adapters/pull/37"],
     "dataset_pr": [],
     "parity_pr": [],
     "metrics": [
