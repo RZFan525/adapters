@@ -292,11 +292,17 @@ Links:
 
 - Original benchmark: <https://github.com/YuehHanChen/CoTControl>, commit
   `5d78aeffe0152ba087c2d31cd07712d029c64785`
-- Fork with the original-side scripts (branch `harbor-parity`, directory
-  `harbor_parity/`): not published yet
+- Fork with the original-side scripts:
+  <https://github.com/RZFan525/CoTControl/tree/harbor-parity> (branch `harbor-parity`,
+  directory `harbor_parity/`)
 - Adapter PR: <https://github.com/harbor-index/adapters/pull/37>
-- Dataset PR: not opened yet
-- Parity results on Hugging Face (`harborframework/parity-experiments`): not uploaded yet
+- Dataset PR: <https://github.com/harbor-framework/harbor-datasets/pull/310>
+- Parity results on Hugging Face: <https://huggingface.co/datasets/harborframework/parity-experiments/discussions/313>.
+  `harborframework/parity-experiments` is over the Hub's limit of 1,000,000 files and
+  rejects pushes at the moment
+  ([harbor-framework/adapters#129](https://github.com/harbor-framework/adapters/issues/129)),
+  so this PR has no files yet. The prepared folder will be pushed there unchanged once
+  pushes are accepted.
 
 **Setup** (the same on both sides unless stated)
 
@@ -387,9 +393,10 @@ export OPENAI_API_KEY=$GATEWAY_KEY OPENAI_BASE_URL=$GATEWAY       # judge
 export COT_CONTROL_JUDGE_MODEL=deepseek-v4.1-flash COT_CONTROL_JUDGE_MAX_RETRIES=6
 ```
 
-Original side, in a checkout of the fork's `harbor-parity` branch:
+Original side, with the fork's `harbor-parity` branch:
 
 ```bash
+git clone -b harbor-parity https://github.com/RZFan525/CoTControl && cd CoTControl
 uv venv --python 3.12 && uv pip install -r harbor_parity/requirements.txt
 export OPENROUTER_API_KEY=$GATEWAY_KEY OPENROUTER_BASE_URL=$GATEWAY
 for run in 1 2 3; do
