@@ -561,6 +561,9 @@ def main() -> None:
         help="Model name the dataset was generated for (see cot-control --help)",
     )
     args = parser.parse_args()
+    if args.upstream_dir is not None:
+        # The upstream grading command line is run from its own directory.
+        args.upstream_dir = args.upstream_dir.resolve()
 
     report = Report()
     check_vendored(report, args.upstream_dir)

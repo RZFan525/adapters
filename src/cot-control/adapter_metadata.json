@@ -24,14 +24,14 @@
       {
         "split": "qa",
         "adapted_benchmark_size": 10836,
-        "parity_benchmark_size": null,
-        "parity_sampling_rate": null,
+        "parity_benchmark_size": 675,
+        "parity_sampling_rate": 0.0623,
         "registry_benchmark_size": 10836,
         "added_agents": ["cot-control-llm@0.1.0"],
-        "parity_matching_agents": [],
-        "parity_unmatching_agents": [],
-        "parity_costs": null,
-        "notes": "Parity experiments have not been run yet; parity fields are intentionally empty. Proposed parity subset: 675 tasks (25 questions per dataset x 9 instruction types, --split parity)."
+        "parity_matching_agents": ["cot-control-llm@0.1.0+deepseek-v4-1-flash-261017"],
+        "parity_unmatching_agents": ["None"],
+        "parity_costs": "$26",
+        "notes": "Parity on a 675-task subset (25 questions per source dataset x 9 instruction types, --split parity), 3 runs per side, with deepseek-v4.1-flash as the evaluated model and as the LLM judge on both sides (a deviation: upstream's judge is gpt-5-mini; the key available for the runs served deepseek-v4.1-flash only). parity_costs is estimated from the gateway's bill for the six runs and includes repeated requests, the judge calls and the part of original-side run 1 that was run again after an interruption. Standard CLI agents are not supported: the benchmark scores the model's raw reasoning trace, which only the adapter's single-call agent captures."
       }
     ]
   }

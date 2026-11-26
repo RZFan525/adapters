@@ -45,8 +45,14 @@ timeout_sec = 900.0
 # the secondary meta-discussion metric. Rule-based tasks need no key for the main reward.
 OPENAI_API_KEY = "${OPENAI_API_KEY:-}"
 OPENAI_BASE_URL = "${OPENAI_BASE_URL:-}"
+# Another judge model can be set here, served by OPENAI_BASE_URL. The judge prompts and the
+# verdict logic stay upstream's, but the two judged measures are then not comparable with
+# the paper's.
 COT_CONTROL_JUDGE_MODEL = "${COT_CONTROL_JUDGE_MODEL:-gpt-5-mini-2025-08-07}"
 COT_CONTROL_META_DISCUSSION = "${COT_CONTROL_META_DISCUSSION:-auto}"
+# Attempts per judge API call when the call fails (empty = upstream's 3). Raise it for an
+# endpoint that fails intermittently; a verdict that was returned is never asked again.
+COT_CONTROL_JUDGE_MAX_RETRIES = "${COT_CONTROL_JUDGE_MAX_RETRIES:-}"
 
 [environment]
 build_timeout_sec = 600.0

@@ -27,6 +27,10 @@ Agent kwargs (``--ak key=value``):
 
 The model sees the task instruction and nothing else; it has no tools and no access to
 the task container.
+
+A request that fails or exceeds ``request_timeout_sec`` raises ``ModelRequestError`` and
+the trial ends without a reward. Upstream sends every prompt once and records a failed
+request as an ``ERROR:`` row; ``harbor run --max-retries N`` runs such trials again.
 """
 
 from __future__ import annotations
@@ -62,6 +66,16 @@ from .request import (
     build_payload,
     parse_response,
 )
+
+
+class ModelRequestError(RuntimeError):
+    """The model request failed: transport error, timeout, or a non-200 answer.
+
+    Upstream records such a request as a row whose response starts with ``ERROR:``. Here it
+    fails the trial under this name. Harbor would otherwise report the request timeout as
+    its own ``AgentTimeoutError`` (with the task's agent timeout in the message), which it
+    never retries; this error is retried by ``harbor run --max-retries N``.
+    """
 
 
 class CoTControlLLMAgent(BaseAgent):
@@ -131,19 +145,33 @@ class CoTControlLLMAgent(BaseAgent):
             "Content-Type": "application/json",
         }
         timeout = httpx.Timeout(self._request_timeout_sec)
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            # Upstream limits the whole request, not individual socket reads.
-            response = await asyncio.wait_for(
-                client.post(
-                    f"{self._api_base}/chat/completions", headers=headers, json=payload
-                ),
-                timeout=self._request_timeout_sec,
-            )
+        try:
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                # Upstream limits the whole request, not individual socket reads.
+                response = await asyncio.wait_for(
+                    client.post(
+                        f"{self._api_base}/chat/completions",
+                        headers=headers,
+                        json=payload,
+                    ),
+                    timeout=self._request_timeout_sec,
+                )
+        except (TimeoutError, httpx.TimeoutException) as exc:
+            raise ModelRequestError(
+                f"Request timed out after {self._request_timeout_sec:g} s"
+            ) from exc
+        except httpx.HTTPError as exc:
+            raise ModelRequestError(f"{type(exc).__name__}: {exc}") from exc
         if response.status_code != 200:
-            raise RuntimeError(
+            raise ModelRequestError(
                 f"API error {response.status_code}: {response.text[:2000]}"
             )
-        return response.json()
+        try:
+            return response.json()
+        except ValueError as exc:
+            raise ModelRequestError(
+                f"API answer is not JSON: {response.text[:2000]}"
+            ) from exc
 
     # -- outputs -----------------------------------------------------------------
 
