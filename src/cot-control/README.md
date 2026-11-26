@@ -301,8 +301,9 @@ Links:
   `harborframework/parity-experiments` is over the Hub's limit of 1,000,000 files and
   rejects pushes at the moment
   ([harbor-framework/adapters#129](https://github.com/harbor-framework/adapters/issues/129)),
-  so this PR has no files yet. The prepared folder will be pushed there unchanged once
-  pushes are accepted.
+  so the files are mirrored in the same layout at
+  <https://huggingface.co/datasets/Vfrz/cot-control-harbor-parity/tree/b16d817859ff49eddc9e45f1f71b5e7b37ffef1a/adapters/cot-control>
+  and will be pushed to that PR unchanged once pushes are accepted.
 
 **Setup** (the same on both sides unless stated)
 
